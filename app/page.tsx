@@ -1,5 +1,4 @@
 import Card from "@/components/home/card";
-import { DEPLOY_URL } from "@/lib/constants";
 
 export default async function Home() {
   return (
@@ -41,12 +40,13 @@ export default async function Home() {
 
       {/* Forum Features Grid */}
       <div className="my-10 grid w-full max-w-screen-xl animate-fade-up grid-cols-1 gap-5 px-5 md:grid-cols-3 xl:px-0">
-        {features.map(({ title, description, large }) => (
+        {features.map(({ title, description, large, demo }) => (
           <Card
             key={title}
             title={title}
             description={description}
-            large={large}
+            large={!!large} // Boolean'a zorladık
+            demo={demo || null} // Eksik olan demo prop'unu null olarak geçtik
           />
         ))}
       </div>
@@ -54,28 +54,29 @@ export default async function Home() {
   );
 }
 
-// Global forum özelliklerini listeleyen yeni temiz veri yapısı
 const features = [
   {
     title: "Global Community",
-    description:
-      "Connect with developers, creators, and tech pioneers from all around the world. Share your vision and collaborate on next-generation projects.",
+    description: "Connect with developers, creators, and tech pioneers from all around the world. Share your vision and collaborate on next-generation projects.",
     large: true,
+    demo: null,
   },
   {
     title: "Advanced Roles & Ranks",
-    description:
-      "Earn reputation, unlock unique badges, and climb the ranks from a passionate learner to an Elite Member or trusted Moderator.",
+    description: "Earn reputation, unlock unique badges, and climb the ranks from a passionate learner to an Elite Member or trusted Moderator.",
+    large: false,
+    demo: null,
   },
   {
     title: "Secure Verification",
-    description:
-      "Powered by reliable, industry-standard authentication systems to keep your profile, discussions, and data completely secure.",
+    description: "Powered by reliable, industry-standard authentication systems to keep your profile, discussions, and data completely secure.",
+    large: false,
+    demo: null,
   },
   {
     title: "Real-time Discussions",
-    description:
-      "Engage in lighting-fast, real-time conversations across diverse categories covering Artificial Intelligence, Software Engineering, and Digital Innovation.",
+    description: "Engage in lighting-fast, real-time conversations across diverse categories covering Artificial Intelligence, Software Engineering, and Digital Innovation.",
     large: true,
+    demo: null,
   },
 ];
