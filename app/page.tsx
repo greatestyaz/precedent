@@ -1,6 +1,10 @@
 import Card from "@/components/home/card";
+import { supabase } from "@/lib/supabase";
 
 export default async function Home() {
+  // Supabase'den verileri çekiyoruz
+  const { data: features } = await supabase.from("features").select("*");
+
   return (
     <>
       {/* Hero Section */}
@@ -40,43 +44,16 @@ export default async function Home() {
 
       {/* Forum Features Grid */}
       <div className="my-10 grid w-full max-w-screen-xl animate-fade-up grid-cols-1 gap-5 px-5 md:grid-cols-3 xl:px-0">
-        {features.map(({ title, description, large, demo }) => (
+        {features?.map((feature: any) => (
           <Card
-            key={title}
-            title={title}
-            description={description}
-            large={!!large} // Boolean'a zorladık
-            demo={demo || null} // Eksik olan demo prop'unu null olarak geçtik
+            key={feature.title}
+            title={feature.title}
+            description={feature.description}
+            large={feature.large}
+            demo={feature.demo}
           />
         ))}
       </div>
     </>
   );
 }
-
-const features = [
-  {
-    title: "Global Community",
-    description: "Connect with developers, creators, and tech pioneers from all around the world. Share your vision and collaborate on next-generation projects.",
-    large: true,
-    demo: null,
-  },
-  {
-    title: "Advanced Roles & Ranks",
-    description: "Earn reputation, unlock unique badges, and climb the ranks from a passionate learner to an Elite Member or trusted Moderator.",
-    large: false,
-    demo: null,
-  },
-  {
-    title: "Secure Verification",
-    description: "Powered by reliable, industry-standard authentication systems to keep your profile, discussions, and data completely secure.",
-    large: false,
-    demo: null,
-  },
-  {
-    title: "Real-time Discussions",
-    description: "Engage in lighting-fast, real-time conversations across diverse categories covering Artificial Intelligence, Software Engineering, and Digital Innovation.",
-    large: true,
-    demo: null,
-  },
-];
