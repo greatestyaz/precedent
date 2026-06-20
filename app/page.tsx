@@ -3,7 +3,8 @@ import { supabase } from "@/lib/supabase";
 
 export default async function Home() {
   // Supabase'den verileri çekiyoruz
-  const { data: features } = await supabase.from("features").select("*");
+  // .order('title') ekledim ki her seferinde farklı sırayla gelmesin
+  const { data: features } = await supabase.from("features").select("*").order("title");
 
   return (
     <>
@@ -44,15 +45,19 @@ export default async function Home() {
 
       {/* Forum Features Grid */}
       <div className="my-10 grid w-full max-w-screen-xl animate-fade-up grid-cols-1 gap-5 px-5 md:grid-cols-3 xl:px-0">
-        {features?.map((feature: any) => (
-          <Card
-            key={feature.title}
-            title={feature.title}
-            description={feature.description}
-            large={feature.large}
-            demo={feature.demo}
-          />
-        ))}
+        {features && features.length > 0 ? (
+          features.map((feature: any) => (
+            <Card
+              key={feature.title} // Supabase'deki verinin benzersiz olması önemli
+              title={feature.title}
+              description={feature.description}
+              large={!!feature.large} // Boolean'a kesin çevirdik
+              demo={feature.demo || null}
+            />
+          ))
+        ) : (
+          <p className="text-center text-gray-400">Henüz özellik eklenmedi...</p>
+        )}
       </div>
     </>
   );
