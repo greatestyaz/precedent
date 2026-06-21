@@ -2,9 +2,8 @@ import Card from "@/components/home/card";
 import { supabase } from "@/lib/supabase";
 
 export default async function Home() {
-  // Supabase'den verileri çekiyoruz
-  // .order('title') ekledim ki her seferinde farklı sırayla gelmesin
-  const { data: features } = await supabase.from("features").select("*").order("title");
+  // Supabase'den kategorileri çekiyoruz
+  const { data: categories } = await supabase.from("categories").select("*");
 
   return (
     <>
@@ -29,34 +28,28 @@ export default async function Home() {
           style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
         >
           <a
-            href="#"
+            href="#categories"
             className="group flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black"
           >
             <p>Explore Forums</p>
           </a>
-          <a
-            href="#"
-            className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 shadow-md transition-colors hover:border-gray-800"
-          >
-            <p>Join Community</p>
-          </a>
         </div>
       </div>
 
-      {/* Forum Features Grid */}
-      <div className="my-10 grid w-full max-w-screen-xl animate-fade-up grid-cols-1 gap-5 px-5 md:grid-cols-3 xl:px-0">
-        {features && features.length > 0 ? (
-          features.map((feature: any) => (
+      {/* Forum Categories Grid */}
+      <div id="categories" className="my-10 grid w-full max-w-screen-xl animate-fade-up grid-cols-1 gap-5 px-5 md:grid-cols-3 xl:px-0">
+        {categories && categories.length > 0 ? (
+          categories.map((cat: any) => (
             <Card
-              key={feature.title} // Supabase'deki verinin benzersiz olması önemli
-              title={feature.title}
-              description={feature.description}
-              large={!!feature.large} // Boolean'a kesin çevirdik
-              demo={feature.demo || null}
+              key={cat.id}
+              title={cat.name}
+              description={cat.description}
+              // Card bileşeninin yapısına göre burayı uyarladık
+              href={`/forum/${cat.slug}`} 
             />
           ))
         ) : (
-          <p className="text-center text-gray-400">Henüz özellik eklenmedi...</p>
+          <p className="col-span-3 text-center text-gray-400">Loading categories...</p>
         )}
       </div>
     </>
