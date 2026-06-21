@@ -1,9 +1,15 @@
+import { createClient } from "@/utils/supabase/server"; // Server-side client kullanımı zorunlu!
 import Card from "@/components/home/card";
-import { supabase } from "@/lib/supabase";
 
 export default async function Home() {
-  // Supabase'den kategorileri çekiyoruz
-  const { data: categories } = await supabase.from("categories").select("*");
+  const supabase = createClient(); // Artık server context'inde çalışıyoruz
+  
+  // Veriyi çekiyoruz
+  const { data: categories, error } = await supabase.from("categories").select("*");
+
+  if (error) {
+    console.error("Supabase Error:", error);
+  }
 
   return (
     <>
@@ -22,7 +28,6 @@ export default async function Home() {
           The global hub for tech enthusiasts, AI developers, and future leaders
         </p>
 
-        {/* Action Buttons */}
         <div
           className="mx-auto mt-6 flex animate-fade-up items-center justify-center space-x-5 opacity-0"
           style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
@@ -44,12 +49,14 @@ export default async function Home() {
               key={cat.id}
               title={cat.name}
               description={cat.description}
-              // Card bileşeninin yapısına göre burayı uyarladık
-              href={`/forum/${cat.slug}`} 
+              href={`/forum/${cat.slug}`}
+              // Eğer Card bileşenin ikon destekliyorsa buraya icon={cat.icon_name} ekleyebilirsin
             />
           ))
         ) : (
-          <p className="col-span-3 text-center text-gray-400">Loading categories...</p>
+          <p className="col-span-3 text-center text-gray-400">
+            {error ? "Bir hata oluştu, veritabanını kontrol et." : "Kategoriler yükleniyor..."}
+          </p>
         )}
       </div>
     </>
