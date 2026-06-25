@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+import { supabase } from "@/lib/supabase";
 import Card from "@/components/home/card";
 
 export default async function Home() {
