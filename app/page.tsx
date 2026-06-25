@@ -1,14 +1,12 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase"; // Lib'den gelen hazır istemciyi kullanıyoruz
 import Card from "@/components/home/card";
 
 export default async function Home() {
-  const supabase = createClient();
-  
-  // Veriyi çekiyoruz
+  // `createClient()` yerine import ettiğimiz hazır `supabase` nesnesini kullanıyoruz
   const { data: categories, error } = await supabase
     .from("categories")
     .select("*")
-    .order("id"); // Veritabanı düzeni için ekledik
+    .order("id");
 
   if (error) {
     console.error("Supabase Veri Çekme Hatası:", error);
